@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'jul';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -215,7 +215,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/jul.ipynb" target="_blank"
+      <li><a href="_sources/notebook.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -351,24 +351,11 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="c1"># import numpy as np</span>
+<span class="c1"># import pandas as pd</span>
 <span class="kn">import</span> <span class="nn">string</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
 <span class="kn">import</span> <span class="nn">copy</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">random</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">string</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;numpy&#39;
 </pre></div>
 </div>
 </div>
@@ -499,19 +486,19 @@ create_alternatives(5)=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sample profile:
-profile={0: &#39;cba&#39;, 1: &#39;bca&#39;, 2: &#39;cab&#39;, 3: &#39;abc&#39;}
+profile={0: &#39;acb&#39;, 1: &#39;abc&#39;, 2: &#39;cab&#39;, 3: &#39;cba&#39;}
 
 Preferences by voter:
-Voter 0: cba
-Voter 1: bca
+Voter 0: acb
+Voter 1: abc
 Voter 2: cab
-Voter 3: abc
+Voter 3: cba
 
 Preferences by frequency:
-cba: 1
-bca: 1
-cab: 1
+acb: 1
 abc: 1
+cab: 1
+cba: 1
 </pre></div>
 </div>
 </div>
@@ -552,11 +539,11 @@ abc: 1
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;cba&#39;, 1: &#39;bca&#39;, 2: &#39;cab&#39;, 3: &#39;abc&#39;}
+profile={0: &#39;acb&#39;, 1: &#39;abc&#39;, 2: &#39;cab&#39;, 3: &#39;cba&#39;}
 --------------------------------------------------------------------------------
 
 Dictatorship rule:
-Dictator: 2
+Dictator: 3
 Winner: c
 </pre></div>
 </div>
@@ -606,7 +593,7 @@ Winner: c
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;cba&#39;, 1: &#39;bca&#39;, 2: &#39;cab&#39;, 3: &#39;abc&#39;}
+profile={0: &#39;acb&#39;, 1: &#39;abc&#39;, 2: &#39;cab&#39;, 3: &#39;cba&#39;}
 --------------------------------------------------------------------------------
 
 Majority rule:
@@ -660,7 +647,7 @@ Winner: None
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;cba&#39;, 1: &#39;bca&#39;, 2: &#39;cab&#39;, 3: &#39;abc&#39;}
+profile={0: &#39;acb&#39;, 1: &#39;abc&#39;, 2: &#39;cab&#39;, 3: &#39;cba&#39;}
 --------------------------------------------------------------------------------
 
 Plurality rule:
