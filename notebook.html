@@ -211,6 +211,21 @@ const thebe_selector_output = ".output, .cell_output"
 <div class="article-header-buttons">
 
 
+<a href="https://github.com/jibibo/ki-fmas-project" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
 
 
 
@@ -493,18 +508,18 @@ create_alternatives(5)=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sample profile:
-profile={0: &#39;abc&#39;, 1: &#39;bca&#39;, 2: &#39;bac&#39;, 3: &#39;bca&#39;}
+profile={0: &#39;acb&#39;, 1: &#39;bac&#39;, 2: &#39;bca&#39;, 3: &#39;acb&#39;}
 
 Preferences by voter:
-Voter 0: abc
-Voter 1: bca
-Voter 2: bac
-Voter 3: bca
+Voter 0: acb
+Voter 1: bac
+Voter 2: bca
+Voter 3: acb
 
 Preferences by frequency:
-bca: 2
-abc: 1
+acb: 2
 bac: 1
+bca: 1
 </pre></div>
 </div>
 </div>
@@ -545,12 +560,12 @@ bac: 1
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;abc&#39;, 1: &#39;bca&#39;, 2: &#39;bac&#39;, 3: &#39;bca&#39;}
+profile={0: &#39;acb&#39;, 1: &#39;bac&#39;, 2: &#39;bca&#39;, 3: &#39;acb&#39;}
 --------------------------------------------------------------------------------
 
 Dictatorship rule:
 Dictator: 3
-Winner: b
+Winner: a
 </pre></div>
 </div>
 </div>
@@ -599,11 +614,11 @@ Winner: b
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;abc&#39;, 1: &#39;bca&#39;, 2: &#39;bac&#39;, 3: &#39;bca&#39;}
+profile={0: &#39;acb&#39;, 1: &#39;bac&#39;, 2: &#39;bca&#39;, 3: &#39;acb&#39;}
 --------------------------------------------------------------------------------
 
 Majority rule:
-Winner: b
+Winner: None
 </pre></div>
 </div>
 </div>
@@ -653,7 +668,7 @@ Winner: b
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;abc&#39;, 1: &#39;bca&#39;, 2: &#39;bac&#39;, 3: &#39;bca&#39;}
+profile={0: &#39;acb&#39;, 1: &#39;bac&#39;, 2: &#39;bca&#39;, 3: &#39;acb&#39;}
 --------------------------------------------------------------------------------
 
 Plurality rule:
