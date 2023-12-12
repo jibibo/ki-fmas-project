@@ -1,0 +1,15 @@
+# _config.yml
+title: Simulating voting rules
+author: Julian Bibo & Chris Hoes (& Federico Fioravanti)
+logo: paper.png
+copyright: 2023
+
+execute:
+  execute_notebooks: force
+
+html:
+  use_repository_button: true
+  favicon: paper.png
+
+repository:
+  url: https://github.com/jibibo/ki-fmas-project
