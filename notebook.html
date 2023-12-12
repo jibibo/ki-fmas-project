@@ -65,6 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebook';</script>
+    <link rel="shortcut icon" href="_static/paper.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -492,18 +493,18 @@ create_alternatives(5)=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sample profile:
-profile={0: &#39;abc&#39;, 1: &#39;cab&#39;, 2: &#39;cba&#39;, 3: &#39;cab&#39;}
+profile={0: &#39;abc&#39;, 1: &#39;bca&#39;, 2: &#39;bac&#39;, 3: &#39;bca&#39;}
 
 Preferences by voter:
 Voter 0: abc
-Voter 1: cab
-Voter 2: cba
-Voter 3: cab
+Voter 1: bca
+Voter 2: bac
+Voter 3: bca
 
 Preferences by frequency:
-cab: 2
+bca: 2
 abc: 1
-cba: 1
+bac: 1
 </pre></div>
 </div>
 </div>
@@ -544,12 +545,12 @@ cba: 1
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;abc&#39;, 1: &#39;cab&#39;, 2: &#39;cba&#39;, 3: &#39;cab&#39;}
+profile={0: &#39;abc&#39;, 1: &#39;bca&#39;, 2: &#39;bac&#39;, 3: &#39;bca&#39;}
 --------------------------------------------------------------------------------
 
 Dictatorship rule:
-Dictator: 1
-Winner: c
+Dictator: 3
+Winner: b
 </pre></div>
 </div>
 </div>
@@ -598,11 +599,11 @@ Winner: c
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;abc&#39;, 1: &#39;cab&#39;, 2: &#39;cba&#39;, 3: &#39;cab&#39;}
+profile={0: &#39;abc&#39;, 1: &#39;bca&#39;, 2: &#39;bac&#39;, 3: &#39;bca&#39;}
 --------------------------------------------------------------------------------
 
 Majority rule:
-Winner: c
+Winner: b
 </pre></div>
 </div>
 </div>
@@ -652,11 +653,11 @@ Winner: c
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;abc&#39;, 1: &#39;cab&#39;, 2: &#39;cba&#39;, 3: &#39;cab&#39;}
+profile={0: &#39;abc&#39;, 1: &#39;bca&#39;, 2: &#39;bac&#39;, 3: &#39;bca&#39;}
 --------------------------------------------------------------------------------
 
 Plurality rule:
-Winner: c
+Winner: b
 </pre></div>
 </div>
 </div>
@@ -1097,7 +1098,7 @@ Plurality with runoff winner: b
   <div class="footer-item">
     
 <p class="component-author">
-By Julian Bibo & Chris Hoes
+By Julian Bibo & Chris Hoes (& Federico Fioravanti)
 </p>
 
   </div>
@@ -1107,7 +1108,7 @@ By Julian Bibo & Chris Hoes
 
   <p class="copyright">
     
-      © Copyright 2022.
+      © Copyright 2023.
       <br/>
     
   </p>
