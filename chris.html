@@ -165,7 +165,7 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="notebook.html">
-                    Simulating voting rules (Python 3.10.10)
+                    Simulating voting rules (Python 3.10)
                 </a>
             </li>
         </ul>
@@ -380,13 +380,14 @@ document.write(`
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">random</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">string</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
 
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;numpy&#39;
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;pandas&#39;
 </pre></div>
 </div>
 </div>
@@ -517,17 +518,19 @@ create_alternatives(5)=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sample profile:
-profile={0: &#39;cab&#39;, 1: &#39;bac&#39;, 2: &#39;bac&#39;, 3: &#39;bac&#39;}
+profile={0: &#39;bca&#39;, 1: &#39;acb&#39;, 2: &#39;cab&#39;, 3: &#39;abc&#39;}
 
 Preferences by voter:
-Voter 0: cab
-Voter 1: bac
-Voter 2: bac
-Voter 3: bac
+Voter 0: bca
+Voter 1: acb
+Voter 2: cab
+Voter 3: abc
 
 Preferences by frequency:
-bac: 3
+bca: 1
+acb: 1
 cab: 1
+abc: 1
 </pre></div>
 </div>
 </div>
@@ -568,12 +571,12 @@ cab: 1
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;cab&#39;, 1: &#39;bac&#39;, 2: &#39;bac&#39;, 3: &#39;bac&#39;}
+profile={0: &#39;abc&#39;, 1: &#39;abc&#39;, 2: &#39;acb&#39;, 3: &#39;cab&#39;}
 --------------------------------------------------------------------------------
 
 Dictatorship rule:
 Dictator: 0
-Winner: c
+Winner: a
 </pre></div>
 </div>
 </div>
@@ -622,11 +625,11 @@ Winner: c
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;cab&#39;, 1: &#39;bac&#39;, 2: &#39;bac&#39;, 3: &#39;bac&#39;}
+profile={0: &#39;abc&#39;, 1: &#39;abc&#39;, 2: &#39;acb&#39;, 3: &#39;cab&#39;}
 --------------------------------------------------------------------------------
 
 Majority rule:
-Winner: b
+Winner: a
 </pre></div>
 </div>
 </div>
@@ -676,11 +679,11 @@ Winner: b
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;cab&#39;, 1: &#39;bac&#39;, 2: &#39;bac&#39;, 3: &#39;bac&#39;}
+profile={0: &#39;abc&#39;, 1: &#39;abc&#39;, 2: &#39;acb&#39;, 3: &#39;cab&#39;}
 --------------------------------------------------------------------------------
 
 Plurality rule:
-Winner: b
+Winner: a
 </pre></div>
 </div>
 </div>
@@ -832,8 +835,8 @@ In bottom 2 votes: 51 times
         <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">preference</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">alternatives</span><span class="p">])</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">alternatives</span><span class="p">)):</span>
-            <span class="n">wins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">idxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">idxs</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="n">losses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">idxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">idxs</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">wins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">idxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">idxs</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">losses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">idxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">idxs</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
             <span class="n">matchups</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">wins</span> <span class="o">+</span> <span class="n">losses</span>
 
@@ -871,22 +874,25 @@ In bottom 2 votes: 51 times
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Head-to-head victories: &#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=100
-n_alternatives=4
-profile={0: &#39;cdba&#39;, 1: &#39;dabc&#39;, 2: &#39;cadb&#39;, 3: &#39;adbc&#39;, 4: &#39;abcd&#39;, 5: &#39;bcda&#39;, 6: &#39;bcad&#39;, 7: &#39;cdba&#39;, 8: &#39;bacd&#39;, 9: &#39;acbd&#39;, 10: &#39;cdba&#39;, 11: &#39;dacb&#39;, 12: &#39;abdc&#39;, 13: &#39;cabd&#39;, 14: &#39;dcab&#39;, 15: &#39;bacd&#39;, 16: &#39;acbd&#39;, 17: &#39;cabd&#39;, 18: &#39;cdba&#39;, 19: &#39;dacb&#39;, 20: &#39;cabd&#39;, 21: &#39;dbca&#39;, 22: &#39;badc&#39;, 23: &#39;cdba&#39;, 24: &#39;cadb&#39;, 25: &#39;dabc&#39;, 26: &#39;cdab&#39;, 27: &#39;cdab&#39;, 28: &#39;bcad&#39;, 29: &#39;dcba&#39;, 30: &#39;dcab&#39;, 31: &#39;dcba&#39;, 32: &#39;dabc&#39;, 33: &#39;dabc&#39;, 34: &#39;adcb&#39;, 35: &#39;dcba&#39;, 36: &#39;badc&#39;, 37: &#39;dabc&#39;, 38: &#39;abcd&#39;, 39: &#39;abdc&#39;, 40: &#39;dabc&#39;, 41: &#39;dabc&#39;, 42: &#39;abdc&#39;, 43: &#39;bcda&#39;, 44: &#39;adbc&#39;, 45: &#39;bdca&#39;, 46: &#39;abcd&#39;, 47: &#39;badc&#39;, 48: &#39;cadb&#39;, 49: &#39;cbda&#39;, 50: &#39;cbad&#39;, 51: &#39;adbc&#39;, 52: &#39;bcad&#39;, 53: &#39;dabc&#39;, 54: &#39;bdca&#39;, 55: &#39;dacb&#39;, 56: &#39;bcda&#39;, 57: &#39;badc&#39;, 58: &#39;cbad&#39;, 59: &#39;bdca&#39;, 60: &#39;cdab&#39;, 61: &#39;bdac&#39;, 62: &#39;dbca&#39;, 63: &#39;dbac&#39;, 64: &#39;bcda&#39;, 65: &#39;bdca&#39;, 66: &#39;dcba&#39;, 67: &#39;dacb&#39;, 68: &#39;dbca&#39;, 69: &#39;cadb&#39;, 70: &#39;dacb&#39;, 71: &#39;dbca&#39;, 72: &#39;dcba&#39;, 73: &#39;cdab&#39;, 74: &#39;abcd&#39;, 75: &#39;dbac&#39;, 76: &#39;badc&#39;, 77: &#39;badc&#39;, 78: &#39;dcab&#39;, 79: &#39;cdba&#39;, 80: &#39;abcd&#39;, 81: &#39;cadb&#39;, 82: &#39;dbca&#39;, 83: &#39;adbc&#39;, 84: &#39;bacd&#39;, 85: &#39;abcd&#39;, 86: &#39;cadb&#39;, 87: &#39;cadb&#39;, 88: &#39;acbd&#39;, 89: &#39;cbad&#39;, 90: &#39;cabd&#39;, 91: &#39;cbad&#39;, 92: &#39;dbac&#39;, 93: &#39;cdab&#39;, 94: &#39;bacd&#39;, 95: &#39;cabd&#39;, 96: &#39;abdc&#39;, 97: &#39;cdba&#39;, 98: &#39;cbda&#39;, 99: &#39;bcad&#39;}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
+n_alternatives=3
+profile={0: &#39;bca&#39;, 1: &#39;acb&#39;, 2: &#39;cab&#39;, 3: &#39;abc&#39;}
 --------------------------------------------------------------------------------
 
  Condorcet rule:
 Winner: None
 Head-to-head victories: 
-[[1 0 1 1]
- [1 1 0 1]
- [0 1 1 0]
- [0 0 1 1]]
+[[1 1 0]
+ [0 1 0]
+ [0 0 1]]
+[[ 1.  2.  0.]
+ [-2.  1.  0.]
+ [ 0.  0.  1.]]
 </pre></div>
 </div>
 </div>
@@ -1107,7 +1113,7 @@ Alternative d: 51
   <div class="footer-item">
     
 <p class="component-author">
-By Julian Bibo & Chris Hoes (& Federico Fioravanti)
+By Julian Bibo & Chris Hoes (based on lectures by Federico Fioravanti)
 </p>
 
   </div>

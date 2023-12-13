@@ -163,7 +163,7 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="notebook.html">
-                    Simulating voting rules (Python 3.10.10)
+                    Simulating voting rules (Python 3.10)
                 </a>
             </li>
         </ul>
@@ -329,7 +329,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ghp-import">ghp-import</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#publish-to-github-pages">Publish to GitHub Pages</a></li>
 </ul>
             </nav>
         </div>
@@ -343,9 +343,10 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="ki-fmas-project">
 <h1>ki-fmas-project<a class="headerlink" href="#ki-fmas-project" title="Permalink to this heading">#</a></h1>
-<section id="ghp-import">
-<h2>ghp-import<a class="headerlink" href="#ghp-import" title="Permalink to this heading">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ghp</span><span class="o">-</span><span class="kn">import</span> <span class="o">-</span><span class="n">nfp</span> <span class="n">_build</span><span class="o">/</span><span class="n">html</span>
+<section id="publish-to-github-pages">
+<h2>Publish to GitHub Pages<a class="headerlink" href="#publish-to-github-pages" title="Permalink to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jb</span> <span class="n">build</span> <span class="o">--</span><span class="nb">all</span> <span class="o">.</span>
+<span class="n">ghp</span><span class="o">-</span><span class="kn">import</span> <span class="o">-</span><span class="n">nfp</span> <span class="n">_build</span><span class="o">/</span><span class="n">html</span>
 </pre></div>
 </div>
 </section>
@@ -396,7 +397,7 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ghp-import">ghp-import</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#publish-to-github-pages">Publish to GitHub Pages</a></li>
 </ul>
   </nav></div>
 
@@ -411,7 +412,7 @@ document.write(`
   <div class="footer-item">
     
 <p class="component-author">
-By Julian Bibo & Chris Hoes (& Federico Fioravanti)
+By Julian Bibo & Chris Hoes (based on lectures by Federico Fioravanti)
 </p>
 
   </div>

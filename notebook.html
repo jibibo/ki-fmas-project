@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Simulating voting rules (Python 3.10.10) &#8212; Simulating voting rules</title>
+    <title>Simulating voting rules (Python 3.10) &#8212; Simulating voting rules</title>
   
   
   
@@ -165,7 +165,7 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1 current active">
                 <a class="reference internal" href="#">
-                    Simulating voting rules (Python 3.10.10)
+                    Simulating voting rules (Python 3.10)
                 </a>
             </li>
         </ul>
@@ -321,7 +321,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Simulating voting rules (Python 3.10.10)</h1>
+    <h1>Simulating voting rules (Python 3.10)</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -353,6 +353,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-condorcet-rule-f-con">The Condorcet rule <span class="math notranslate nohighlight">\(F_{CON}\)</span></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-borda-rule-f-bor">The Borda rule <span class="math notranslate nohighlight">\(F_{BOR}\)</span></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#various-scoring-rules">Various scoring rules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
 </ul>
             </nav>
         </div>
@@ -364,8 +365,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="simulating-voting-rules-python-3-10-10">
-<h1>Simulating voting rules (Python 3.10.10)<a class="headerlink" href="#simulating-voting-rules-python-3-10-10" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="simulating-voting-rules-python-3-10">
+<h1>Simulating voting rules (Python 3.10)<a class="headerlink" href="#simulating-voting-rules-python-3-10" title="Permalink to this heading">#</a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p>Voting rules can be confusing. To illustrate the possible voting rules as discussed in the lectures, we simulate the voting rules and the effects they can have. In this demo, “agent” and “voter” is used interchangably.</p>
@@ -373,11 +374,9 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
-<span class="c1"># import numpy as np</span>
-<span class="c1"># import pandas as pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">string</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
-<span class="kn">import</span> <span class="nn">copy</span>
 </pre></div>
 </div>
 </div>
@@ -424,13 +423,13 @@ document.write(`
 
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">create_voters</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">create_alternatives</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">create_alternatives</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>create_voters(5)=[0, 1, 2, 3, 4]
-create_alternatives(5)=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;]
+create_alternatives(3)=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
 </pre></div>
 </div>
 </div>
@@ -483,10 +482,13 @@ create_alternatives(5)=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># sample preference profile for 4 voters and 3 alternatives</span>
 <span class="n">n_voters</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="n">n_alternatives</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_voters</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_alternatives</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+
 <span class="n">voters</span> <span class="o">=</span> <span class="n">create_voters</span><span class="p">(</span><span class="n">n_voters</span><span class="p">)</span>
 <span class="n">alternatives</span> <span class="o">=</span> <span class="n">create_alternatives</span><span class="p">(</span><span class="n">n_alternatives</span><span class="p">)</span>
 <span class="n">profile</span> <span class="o">=</span> <span class="n">create_profile</span><span class="p">(</span><span class="n">voters</span><span class="p">,</span> <span class="n">alternatives</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sample profile:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Randomized sample profile:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">profile</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
@@ -507,18 +509,21 @@ create_alternatives(5)=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sample profile:
-profile={0: &#39;acb&#39;, 1: &#39;bac&#39;, 2: &#39;bca&#39;, 3: &#39;acb&#39;}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
+n_alternatives=3
+
+Randomized sample profile:
+profile={0: &#39;acb&#39;, 1: &#39;acb&#39;, 2: &#39;abc&#39;, 3: &#39;bca&#39;}
 
 Preferences by voter:
 Voter 0: acb
-Voter 1: bac
-Voter 2: bca
-Voter 3: acb
+Voter 1: acb
+Voter 2: abc
+Voter 3: bca
 
 Preferences by frequency:
 acb: 2
-bac: 1
+abc: 1
 bca: 1
 </pre></div>
 </div>
@@ -545,27 +550,22 @@ bca: 1
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_voters</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_alternatives</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">profile</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
 
 <span class="n">dictator</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">voters</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Dictatorship rule:&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Dictator: </span><span class="si">{</span><span class="n">dictator</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Dictator: </span><span class="si">{</span><span class="n">dictator</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="n">winner</span> <span class="o">=</span> <span class="n">dictatorship_rule</span><span class="p">(</span><span class="n">profile</span><span class="p">,</span> <span class="n">dictator</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Winner: </span><span class="si">{</span><span class="n">winner</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Dictatorship rule winner: </span><span class="si">{</span><span class="n">winner</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;acb&#39;, 1: &#39;bac&#39;, 2: &#39;bca&#39;, 3: &#39;acb&#39;}
---------------------------------------------------------------------------------
+profile={0: &#39;acb&#39;, 1: &#39;acb&#39;, 2: &#39;abc&#39;, 3: &#39;bca&#39;}
 
-Dictatorship rule:
-Dictator: 3
-Winner: a
+Dictator: 2
+Dictatorship rule winner: a
 </pre></div>
 </div>
 </div>
@@ -602,23 +602,18 @@ Winner: a
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_voters</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_alternatives</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">profile</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Majority rule:&#39;</span><span class="p">)</span>
 
 <span class="n">winner</span> <span class="o">=</span> <span class="n">majority_rule</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Winner: </span><span class="si">{</span><span class="n">winner</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Majority rule winner: </span><span class="si">{</span><span class="n">winner</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;acb&#39;, 1: &#39;bac&#39;, 2: &#39;bca&#39;, 3: &#39;acb&#39;}
---------------------------------------------------------------------------------
+profile={0: &#39;acb&#39;, 1: &#39;acb&#39;, 2: &#39;abc&#39;, 3: &#39;bca&#39;}
 
-Majority rule:
-Winner: None
+Majority rule winner: a
 </pre></div>
 </div>
 </div>
@@ -656,7 +651,6 @@ Winner: None
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_voters</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_alternatives</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">profile</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Plurality rule:&#39;</span><span class="p">)</span>
 
@@ -668,11 +662,10 @@ Winner: None
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=4
 n_alternatives=3
-profile={0: &#39;acb&#39;, 1: &#39;bac&#39;, 2: &#39;bca&#39;, 3: &#39;acb&#39;}
---------------------------------------------------------------------------------
+profile={0: &#39;acb&#39;, 1: &#39;acb&#39;, 2: &#39;abc&#39;, 3: &#39;bca&#39;}
 
 Plurality rule:
-Winner: b
+Winner: a
 </pre></div>
 </div>
 </div>
@@ -959,7 +952,6 @@ Bottom vote: 46 times
         <span class="nb">print</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
 
 <span class="n">majority_winner</span> <span class="o">=</span> <span class="n">majority_rule</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Majority rule winner: </span><span class="si">{</span><span class="n">majority_winner</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -974,7 +966,6 @@ n_alternatives=3
 
 Preferences by frequency:
 bca:  3   cab:  3   bac:  2   abc:  1   cba:  1   
---------------------------------------------------------------------------------
 
 Majority rule winner: None
 Plurality with runoff winner: b
@@ -987,14 +978,179 @@ Plurality with runoff winner: b
 </section>
 <section id="the-condorcet-rule-f-con">
 <h2>The Condorcet rule <span class="math notranslate nohighlight">\(F_{CON}\)</span><a class="headerlink" href="#the-condorcet-rule-f-con" title="Permalink to this heading">#</a></h2>
+<p>Given that <span class="math notranslate nohighlight">\(n_{x,y}\)</span> is the number of times that <span class="math notranslate nohighlight">\(x\)</span> is preferred to <span class="math notranslate nohighlight">\(y\)</span> in <span class="math notranslate nohighlight">\(R\)</span>, let <span class="math notranslate nohighlight">\(F_{CON}(R) = x\)</span> such that <span class="math notranslate nohighlight">\(n_{x,y} &gt; n_{y,x}\)</span> for any other alternative <span class="math notranslate nohighlight">\(y \in A\)</span>. So, the Condercet winner is the alternative that beats any other alternative in a head-to-head contest.</p>
+<p>We implement the Condorcet rule by first constructing a <span class="math notranslate nohighlight">\(|A| \times |A|\)</span> matrix <span class="math notranslate nohighlight">\(M\)</span> in the function <code class="docutils literal notranslate"><span class="pre">condorcet_scores</span></code> containing the scores of each alternative matchup <span class="math notranslate nohighlight">\(n_{a_i, a_j}\)</span> with <span class="math notranslate nohighlight">\(i,j \in [0, 1, ..., |A|]\)</span>. That is, <span class="math notranslate nohighlight">\(M_{i,j}\)</span> is the amount of times alternative <span class="math notranslate nohighlight">\(a_i\)</span> beats <span class="math notranslate nohighlight">\(a_j\)</span> in a head-to-head contest. The matrix is filled with zeros along the diagonal since <span class="math notranslate nohighlight">\(a_i\)</span> can never beat <span class="math notranslate nohighlight">\(a_i\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">condorcet_scores</span><span class="p">(</span><span class="n">profile</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a matrix of Condorcet scores given a preference profile.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">n_alternatives</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">alternatives</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span><span class="p">[:</span><span class="n">n_alternatives</span><span class="p">])</span>
+
+    <span class="n">matchups</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_alternatives</span><span class="p">,</span> <span class="n">n_alternatives</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">preference</span> <span class="ow">in</span> <span class="n">profile</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a_i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">alternatives</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">a_j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">alternatives</span><span class="p">):</span>
+                <span class="c1"># skip if same alternative</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># lower index means it beats the other</span>
+                <span class="k">if</span> <span class="n">preference</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">a_i</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">preference</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">a_j</span><span class="p">):</span>
+                    <span class="n">matchups</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                
+    <span class="k">return</span> <span class="n">matchups</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To illustrate this matrix, we construct we profile <span class="math notranslate nohighlight">\(R\)</span> as shown in the lecture slides, and construct the matrix <span class="math notranslate nohighlight">\(M\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_voters</span> <span class="o">=</span> <span class="mi">13</span>
+<span class="n">n_alternatives</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_voters</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_alternatives</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">submissions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;abcd&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;bcda&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;cdba&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;dcba&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
+
+<span class="n">profile</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">submissions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_voters</span><span class="p">)}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Preferences by frequency:&#39;</span><span class="p">)</span>
+<span class="n">preference_count</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">profile</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">preference_count</span><span class="o">.</span><span class="n">most_common</span><span class="p">()):</span>
+    <span class="c1"># print in table form</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">preference</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">count</span><span class="si">:</span><span class="s1">&gt;2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;   &#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">6</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">preference_count</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Condorcet scores matrix:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">condorcet_scores</span><span class="p">(</span><span class="n">profile</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ellipsis
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=13
+n_alternatives=4
+
+Preferences by frequency:
+abcd:  4   bcda:  3   cdba:  3   dcba:  3   
+
+Condorcet scores matrix:
+[[ 0  4  4  4]
+ [ 9  0  7  7]
+ [ 9  6  0 10]
+ [ 9  6  3  0]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Using this matrix, we can deduce that <span class="math notranslate nohighlight">\(b\)</span> is the winner (also stated by the lecture slides). Counting from 1, row number <span class="math notranslate nohighlight">\(i = 2\)</span> of <span class="math notranslate nohighlight">\(M\)</span> indicates the score of <span class="math notranslate nohighlight">\(b\)</span> when matched against opponents <span class="math notranslate nohighlight">\(j=1\)</span> to <span class="math notranslate nohighlight">\(j=4\)</span>. <span class="math notranslate nohighlight">\(M_{2,2} = 0\)</span> as stated previously, because <span class="math notranslate nohighlight">\(b\)</span> cannot win against themselves. Based on the matrix <span class="math notranslate nohighlight">\(M\)</span>, <span class="math notranslate nohighlight">\(n_{b,a} &gt; n_{a,b} \wedge n_{b,c} &gt; n_{c,b} \wedge n_{b,d} &gt; n_{d,b}\)</span>, thus <span class="math notranslate nohighlight">\(b\)</span> is indeed the Condorcet winner.</p>
+<p>Below we construct the function <code class="docutils literal notranslate"><span class="pre">condorcet_rule</span></code> that calculates the Condorcet winner this way. By calling the function, we show that <span class="math notranslate nohighlight">\(b\)</span> is indeed the winner for the given profile.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">condorcet_rule</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This rule returns the Condorcet winner.</span>
+<span class="sd">    If no such winner exists, it returns None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">matchups</span> <span class="o">=</span> <span class="n">condorcet_scores</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
+    <span class="n">n_alternatives</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">matchups</span><span class="p">)</span>
+
+    <span class="c1"># iterate over all rows in the matrix M</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_alternatives</span><span class="p">):</span>
+
+        <span class="c1"># iterate over all matchups</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_alternatives</span><span class="p">):</span>
+
+            <span class="c1"># skip if same alternative</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># if there is a matchup where the alternative i loses or ties,</span>
+            <span class="c1"># it is not a winner</span>
+            <span class="k">if</span> <span class="n">matchups</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">matchups</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]:</span>
+                <span class="k">break</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># we did not break: the alternative never lost, so it wins</span>
+            <span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    
+    <span class="c1"># no Condorcet winner</span>
+    <span class="k">return</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">winner</span> <span class="o">=</span> <span class="n">condorcet_rule</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Condorcet rule winner: </span><span class="si">{</span><span class="n">winner</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Condorcet rule winner: b
+</pre></div>
+</div>
+</div>
+</div>
+<p>Keep in mind that there is not always a Condorcet winner:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">483</span><span class="p">)</span>
+
+<span class="n">n_voters</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">n_alternatives</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="n">create_profile</span><span class="p">(</span><span class="n">create_voters</span><span class="p">(</span><span class="n">n_voters</span><span class="p">),</span> <span class="n">create_alternatives</span><span class="p">(</span><span class="n">n_alternatives</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_voters</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_alternatives</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Preferences by frequency:&#39;</span><span class="p">)</span>
+<span class="n">preference_count</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">profile</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">preference_count</span><span class="o">.</span><span class="n">most_common</span><span class="p">()):</span>
+    <span class="c1"># print in table form</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">preference</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">count</span><span class="si">:</span><span class="s1">&gt;2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;   &#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">6</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">preference_count</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Condorcet scores matrix:&#39;</span><span class="p">)</span>
+<span class="n">matrix</span> <span class="o">=</span> <span class="n">condorcet_scores</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Condorcet rule winner:&#39;</span><span class="p">)</span>
+<span class="n">winner</span> <span class="o">=</span> <span class="n">condorcet_rule</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">winner</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=20
+n_alternatives=4
+
+Preferences by frequency:
+acdb:  3   cbad:  2   bacd:  2   cabd:  2   cbda:  2   cdab:  1   
+dbac:  1   acbd:  1   adbc:  1   dbca:  1   dcba:  1   abcd:  1   
+dabc:  1   cdba:  1   
+
+Condorcet scores matrix:
+[[ 0 10 10 12]
+ [10  0  7 10]
+ [10 13  0 15]
+ [ 8 10  5  0]]
+
+Condorcet rule winner:
+winner=None
 </pre></div>
 </div>
 </div>
@@ -1002,14 +1158,233 @@ Plurality with runoff winner: b
 </section>
 <section id="the-borda-rule-f-bor">
 <h2>The Borda rule <span class="math notranslate nohighlight">\(F_{BOR}\)</span><a class="headerlink" href="#the-borda-rule-f-bor" title="Permalink to this heading">#</a></h2>
+<p>The winner of the Borda rule is the alternative that accumulates the most points, which is done by being positioned in a favorable position in voter’s preferences. For the Borda rule, the scoring scale is linear. That is, for <span class="math notranslate nohighlight">\(|A| = 3\)</span> alternatives, the highest positioned alternative gets 2 points from a voter, the middle alternative gets 1 point and the least preferable alternative gets 0 points. In other words, alternatives gain points based on how many alternatives are positioned below them per voter preference.</p>
+<p><span class="math notranslate nohighlight">\(F_{BOR}(R) = \text{argmax}_{x \in A}b_R(x)\)</span> with <span class="math notranslate nohighlight">\(b_i(x) = |A| - k\)</span>, if alternative <span class="math notranslate nohighlight">\(x\)</span> is on the <span class="math notranslate nohighlight">\(k^{\text{th}}\)</span> position in preference <span class="math notranslate nohighlight">\(\succ_i\)</span> of agent <span class="math notranslate nohighlight">\(i\)</span>, and <span class="math notranslate nohighlight">\(b_R(x) = \Sigma_{i \in N} b_i(x)\)</span>. That is, the Borda rule chooses the alternative(s) with the highest Borda score(s).</p>
+<p>The strength of this rule is that it uses more information than other rules. It takes into account the positioning of all alternatives listed in a preference. This makes this rule relatively more “fair”. Additionally, Borda rule winner(s) always exist.</p>
+<p>We first define the function <code class="docutils literal notranslate"><span class="pre">borda_scoring</span></code> that returns the array of scores <span class="math notranslate nohighlight">\(S\)</span> with <span class="math notranslate nohighlight">\(S_i\)</span> being the Borda score of alternative <span class="math notranslate nohighlight">\(a_i \in A\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">borda_scoring</span><span class="p">(</span><span class="n">profile</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns an array of Borda scores given a preference profile.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">n_alternatives</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">alternatives</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span><span class="p">[:</span><span class="n">n_alternatives</span><span class="p">])</span>
+
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_alternatives</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="c1"># iterate over all voter preferences</span>
+    <span class="k">for</span> <span class="n">preference</span> <span class="ow">in</span> <span class="n">profile</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        
+        <span class="c1"># iterate over all alternatives in the preference</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a_i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">preference</span><span class="p">):</span>
+            
+            <span class="c1"># add the score for this alternative</span>
+            <span class="c1"># - 1 because we start counting from 0</span>
+            <span class="n">scores</span><span class="p">[</span><span class="n">alternatives</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">a_i</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">n_alternatives</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+    
+    <span class="k">return</span> <span class="n">scores</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To illustrate this array, we construct we profile <span class="math notranslate nohighlight">\(R\)</span> as shown in the lecture slides, and then construct the scores array <span class="math notranslate nohighlight">\(S\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_voters</span> <span class="o">=</span> <span class="mi">13</span>
+<span class="n">n_alternatives</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_voters</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_alternatives</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">submissions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;abcd&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;bcda&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;cdba&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;dcba&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
+
+<span class="n">profile</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">submissions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_voters</span><span class="p">)}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Preferences by frequency:&#39;</span><span class="p">)</span>
+<span class="n">preference_count</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">profile</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">preference_count</span><span class="o">.</span><span class="n">most_common</span><span class="p">()):</span>
+    <span class="c1"># print in table form</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">preference</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">count</span><span class="si">:</span><span class="s1">&gt;2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;   &#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">6</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">preference_count</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Borda scores array:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">borda_scoring</span><span class="p">(</span><span class="n">profile</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ellipsis
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=13
+n_alternatives=4
+
+Preferences by frequency:
+abcd:  4   bcda:  3   cdba:  3   dcba:  3   
+
+Borda scores array:
+[12 23 25 18]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Based on this Borda scores array, we can deduce that the second alternative (<span class="math notranslate nohighlight">\(b\)</span>) is the Borda rule winner. This matches the result as shown on the lecture slides.</p>
+<p>We now implement the function <code class="docutils literal notranslate"><span class="pre">scoring_rule</span></code> that actually computes the winner(s) and returns them using the provided scoring function (e.g. for the Borda rule we use the scoring function <code class="docutils literal notranslate"><span class="pre">borda_scoring</span></code>)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">scoring_rule</span><span class="p">(</span><span class="n">profile</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">scoring_fn</span><span class="p">:</span> <span class="nb">callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This rule returns the winner(s) specified by the scoring function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">scoring_fn</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
+
+    <span class="c1"># if multiple winners, return all</span>
+    <span class="n">max_score</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+    <span class="n">winners</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">max_score</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">winners</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+<p>To demonstrate this rule, we will again show the example from the lecture slides:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_voters</span> <span class="o">=</span> <span class="mi">13</span>
+<span class="n">n_alternatives</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_voters</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_alternatives</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">submissions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;abcd&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;bcda&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;cdba&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;dcba&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
+
+<span class="n">profile</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">submissions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_voters</span><span class="p">)}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Preferences by frequency:&#39;</span><span class="p">)</span>
+<span class="n">preference_count</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">profile</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">preference_count</span><span class="o">.</span><span class="n">most_common</span><span class="p">()):</span>
+    <span class="c1"># print in table form</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">preference</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">count</span><span class="si">:</span><span class="s1">&gt;2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;   &#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">6</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">preference_count</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="n">winners</span> <span class="o">=</span> <span class="n">scoring_rule</span><span class="p">(</span><span class="n">profile</span><span class="p">,</span> <span class="n">borda_scoring</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">winners</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Borda rule winner(s): </span><span class="si">{</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">winners</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">No Borda rule winners.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=13
+n_alternatives=4
+
+Preferences by frequency:
+abcd:  4   bcda:  3   cdba:  3   dcba:  3   
+
+Borda rule winner(s): c
+</pre></div>
+</div>
+</div>
+</div>
+<p>However, the Borda rule is sensitive to the introduction or removal of new canditates. It is also not strategy-proof. That is, voters can lie about their true preferences in order to influence the winner to their advantage. We illustrate this below. By removing the alternative <span class="math notranslate nohighlight">\(c\)</span>, that has no chance of winning, we change the outcome of the election: suddenly <span class="math notranslate nohighlight">\(b\)</span> is the winner instead of <span class="math notranslate nohighlight">\(a\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_voters</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">n_alternatives</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">submissions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;acb&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">35</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;bac&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">33</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;cba&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">32</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">submissions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_voters</span><span class="p">)}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_voters</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_alternatives</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Preferences by frequency:&#39;</span><span class="p">)</span>
+<span class="n">preference_count</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">profile</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">preference_count</span><span class="o">.</span><span class="n">most_common</span><span class="p">()):</span>
+    <span class="c1"># print in table form</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">preference</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">count</span><span class="si">:</span><span class="s1">&gt;2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;   &#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">6</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">preference_count</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="n">borda_scoring</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Borda scores array:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+
+<span class="n">winners</span> <span class="o">=</span> <span class="n">scoring_rule</span><span class="p">(</span><span class="n">profile</span><span class="p">,</span> <span class="n">borda_scoring</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">winners</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Borda rule winner(s): </span><span class="si">{</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">winners</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">No Borda rule winners.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=100
+n_alternatives=3
+
+Preferences by frequency:
+acb: 35   bac: 33   cba: 32   
+
+Borda scores array:
+[103  98  99]
+
+Borda rule winner(s): a
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_voters</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">n_alternatives</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">submissions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ab&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">35</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;ba&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">33</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;ba&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">32</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">submissions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_voters</span><span class="p">)}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_voters</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_alternatives</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Preferences by frequency:&#39;</span><span class="p">)</span>
+<span class="n">preference_count</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">profile</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">preference_count</span><span class="o">.</span><span class="n">most_common</span><span class="p">()):</span>
+    <span class="c1"># print in table form</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">preference</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">count</span><span class="si">:</span><span class="s1">&gt;2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;   &#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">6</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">preference_count</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="n">borda_scoring</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Borda scores array:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+
+<span class="n">winners</span> <span class="o">=</span> <span class="n">scoring_rule</span><span class="p">(</span><span class="n">profile</span><span class="p">,</span> <span class="n">borda_scoring</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">winners</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Borda rule winner(s): </span><span class="si">{</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">winners</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">No Borda rule winners.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=100
+n_alternatives=2
+
+Preferences by frequency:
+ba: 65   ab: 35   
+
+Borda scores array:
+[35 65]
+
+Borda rule winner(s): b
 </pre></div>
 </div>
 </div>
@@ -1017,18 +1392,86 @@ Plurality with runoff winner: b
 </section>
 <section id="various-scoring-rules">
 <h2>Various scoring rules<a class="headerlink" href="#various-scoring-rules" title="Permalink to this heading">#</a></h2>
+<p>Finally, we will build on the Borda rule and propose various possible scoring rules. The Borda scores are assigned linearly, but what if you assign scores with more of a gap between the number 1 and the number 2? This is what the Downdall scoring method tries to capture.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dowdall_scoring</span><span class="p">(</span><span class="n">profile</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns an array of Dowdall scores given a preference profile.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">n_alternatives</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">alternatives</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span><span class="p">[:</span><span class="n">n_alternatives</span><span class="p">])</span>
+
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_alternatives</span><span class="p">)</span>
+
+    <span class="c1"># iterate over all voter preferences</span>
+    <span class="k">for</span> <span class="n">preference</span> <span class="ow">in</span> <span class="n">profile</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        
+        <span class="c1"># iterate over all alternatives in the preference</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a_i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">preference</span><span class="p">):</span>
+            
+            <span class="c1"># add the score for this alternative</span>
+            <span class="n">scores</span><span class="p">[</span><span class="n">alternatives</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">a_i</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">scores</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_voters</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">n_alternatives</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">submissions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;acb&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;bac&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;bca&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">submissions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_voters</span><span class="p">)}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_voters</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_alternatives</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Preferences by frequency:&#39;</span><span class="p">)</span>
+<span class="n">preference_count</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">profile</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">preference_count</span><span class="o">.</span><span class="n">most_common</span><span class="p">()):</span>
+    <span class="c1"># print in table form</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">preference</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">count</span><span class="si">:</span><span class="s1">&gt;2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;   &#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">6</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">preference_count</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="n">dowdall_scoring</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Dowdall scores array:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+
+<span class="n">winners</span> <span class="o">=</span> <span class="n">scoring_rule</span><span class="p">(</span><span class="n">profile</span><span class="p">,</span> <span class="n">dowdall_scoring</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">winners</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Dowdall scoring winner(s): </span><span class="si">{</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">winners</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">No Dowdall scoring winners.&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ellipsis
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n_voters=3
+n_alternatives=3
+
+Preferences by frequency:
+acb:  1   bac:  1   bca:  1   
+
+Dowdall scores array:
+[1.83333333 2.33333333 1.33333333]
+
+Dowdall scoring winner(s): b
 </pre></div>
 </div>
 </div>
 </div>
+<p>Besides Dowdall, you can think of any scoring function possible. The scoring function <span class="math notranslate nohighlight">\((1, 0, 0, ..., 0)\)</span> is equivalent to just using the plurality rule <span class="math notranslate nohighlight">\(F_{PLU}\)</span>.</p>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">#</a></h2>
+<p>We hope this overview clarifies the voting and scoring rules as discussed in the Social Choice lectures. Having the option to implement these voting and scoring rules in a programmatic way can help solve various issues in the field of Social Choice where voting or scoring rules are viable solutions.</p>
 </section>
 </section>
 
@@ -1099,6 +1542,7 @@ Plurality with runoff winner: b
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-condorcet-rule-f-con">The Condorcet rule <span class="math notranslate nohighlight">\(F_{CON}\)</span></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-borda-rule-f-bor">The Borda rule <span class="math notranslate nohighlight">\(F_{BOR}\)</span></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#various-scoring-rules">Various scoring rules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
 </ul>
   </nav></div>
 
@@ -1113,7 +1557,7 @@ Plurality with runoff winner: b
   <div class="footer-item">
     
 <p class="component-author">
-By Julian Bibo & Chris Hoes (& Federico Fioravanti)
+By Julian Bibo & Chris Hoes (based on lectures by Federico Fioravanti)
 </p>
 
   </div>
